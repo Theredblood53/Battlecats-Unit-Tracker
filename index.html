@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="style.css">
+	
+	<title>Battle Cats Unit Tracker</title>
+</head>
+<body>
+	<header>
+		<h1>Battle Cats Unit Tracker</h1>
+		<p>Track your obtained units and wishlist across all banners</p>
+	</header>
+
+	<details class="instructions" id="instructions">
+		<summary class="instructions-toggle" aria-label="Toggle instructions">Tips & Controls</summary>
+
+		<div class="instructions-content">
+			<h2>How it works</h2>
+			<ul>
+				<li>Left-click a unit to cycle statuses (unobtained → obtained → wishlist).</li>
+				<li>Click a banner to show/hide its units.</li>
+				<li>Use Expand/Collapse All for quick toggling.</li>
+			</ul>
+		</div>
+	</details>
+
+	<div class="app-container">
+		<div class="wishlist-section">
+			<h2 class="wishlist-title">Your Wishlist</h2>
+			<div class="wishlist-container" id="wishlistContainer">
+				<div class="wishlist-empty">No units in your wishlist yet. Click on units to add them!</div>
+			</div>
+		</div>
+
+		<div class="status-counter">
+		<span>Cats:</span>
+			<div class="status-item">
+				<div class="status-color unobtained-color"></div>
+				<span>Unobtained: <span id="unobtainedCount">0</span></span>
+			</div>
+			<div class="status-item">
+				<div class="status-color obtained-color"></div>
+				<span>Obtained: <span id="obtainedCount">0</span></span>
+			</div>
+			<div class="status-item">
+				<div class="status-color wishlist-color"></div>
+				<span>Wishlist: <span id="wishlistCount">0</span></span>
+			</div>
+		</div>
+
+		<div class="controls">
+			<button class="btn" id="expandAllBtn">
+				<i class="fas fa-expand"></i> Expand All Banners
+			</button>
+			<button class="btn" id="collapseAllBtn">
+				<i class="fas fa-compress"></i> Collapse All Banners
+			</button>
+			<button class="btn" id="resetDataBtn">
+				<i class="fas fa-trash"></i> Reset Data
+			</button>
+		</div>
+
+		<div class="banners-grid" id="bannersGrid">
+			<!-- Banners and their units will be dynamically inserted here -->
+		</div>
+
+	<div class="footer">
+		<p>This is a fan-made project, all of the original assets are of proprety of their original creators.</p>
+		<p>Current Git-Hub Page: <a href="https://github.com/Theredblood53" class="fa-brands fa-github"></a></p>
+	</div>
+	
+	<script src="script.js"></script>
+	
+</body>
+</html>
