@@ -28,6 +28,6 @@ This does not connect to your in-game account, you have to do the tracking manua
 
 #### Things to add
 
-* Move data to a csv for easier organization
+* ~~Move data to a csv for easier organization~~ (Done)
 * Search bar for Banners/Units (Banners done)
 * Add sections for the different versions/regions of the game
