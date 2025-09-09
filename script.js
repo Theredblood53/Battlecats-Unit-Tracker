@@ -2,6 +2,9 @@ let bannersData = [];
 let unitsData = [];
 let userUnits = [];
 
+const csvUrlUnits = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8d4uolEOro3DVb2_I--8AU3SMpji6Ox0udMrSnh3tJ2Q1LILcgTO98UBHsrC5ElONOhnpHDloXvZz/pub?gid=667587167&single=true&output=csv";
+const csvUrlBanners = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR8d4uolEOro3DVb2_I--8AU3SMpji6Ox0udMrSnh3tJ2Q1LILcgTO98UBHsrC5ElONOhnpHDloXvZz/pub?gid=1312119616&single=true&output=csv";
+
 const STATUS_UNOBTAINED = 0;
 const STATUS_OBTAINED = 1;
 const STATUS_WISHLIST = 2;
@@ -28,76 +31,38 @@ function saveUserData() {
 }
 
 function loadBannersData() {
-//Banners data
-bannersData = [
-	{ 
-		id: 1, 
-		name: "Nekoluga",
-		image: "neko",
-		units: [1,2,3,4,5,6,7,8,9,10,11,12]
-	},
-	{ 
-		id: 2, 
-		name: "The Dynamites",
-		image: "dynamite",
-		units: [13,14,15,16,17,18,19,20,21,22,23,24]
-	},
-	{ 
-		id: 3, 
-		name: "Sengoku Wargods Vajiras",
-		image: "vajiras",
-		units: [1,2,3,4,5,6,7,8,9,10,11,12]
-	},
-	{ 
-		id: 4, 
-		name: "Cyber Academy Galaxy Gals",
-		image: "academy",
-		units: [1,2,3,4,5,6,7,8,9,10,11,12]
-	},
-	{ 
-		id: 5, 
-		name: "Lords of Destruction Dragon Emperors",
-		image: "emperor",
-		units: [1,2,3,4,5,6,7,8,9,10,11,12]
-	},
-	{ 
-		id: 6, 
-		name: "Ancient Heroes Ultra Souls",
-		image: "ultra",
-		units: [1,2,3,4,5,6,7,8,9,10,11,12]
-	}
-];
-
-//Units data
-unitsData = [
-	{ id: 1, name: "Nekoluga", rarity: "U",},
-	{ id: 2, name: "Asiluga", rarity: "U",},
-	{ id: 3, name: "Kubiluga", rarity: "U",},
-	{ id: 4, name: "Tecoluga", rarity: "U",},
-	{ id: 5, name: "Balaluga", rarity: "U",},
-	{ id: 6, name: "Togeluga", rarity: "U",},
-	{ id: 7, name: "Nobiluga", rarity: "U",},
-	{ id: 8, name: "Papaluga", rarity: "U",},
-	{ id: 9, name: "Furiluga", rarity: "U",},
-	{ id: 10, name: "Kaoluga", rarity: "U",},
-	{ id: 11, name: "Mamoluga", rarity: "U",},
-	{ id: 12, name: "Legeluga", rarity: "L",},
-	{ id: 13, name: "Ice Cat", rarity: "U",},
-	{ id: 14, name: "Cat Machine", rarity: "U",},
-	{ id: 15, name: "Lesser Demon Cat", rarity: "U",},
-	{ id: 16, name: "Marauder Cat", rarity: "U",},
-	{ id: 17, name: "Baby Cat", rarity: "U",},
-	{ id: 18, name: "Nurse Cat", rarity: "U",},
-	{ id: 19, name: "Cat Clan Heroes", rarity: "U",},
-	{ id: 20, name: "Lasvoss", rarity: "U",},
-	{ id: 21, name: "Summoner Satoru", rarity: "U",},
-	{ id: 22, name: "Cat Tengu", rarity: "U",},
-	{ id: 23, name: "Dynasaurus Cat", rarity: "U",},
-	{ id: 24, name: "Wonder MOMOCO", rarity: "L",}
-];
-
-renderBanners();
-updateWishlistDisplay();
+	//fetch the banners data from the csv and put it in an array
+	fetch(csvUrlBanners).then(response => response.text()).then(data => {
+		const csvBannersData = data;
+		bannersData = csvBannersData.split('\n').map(line => {const [id, name, image] = line.split(',');
+			return {
+				id: parseInt(id),
+				name: name,
+				image: image
+			};
+		});
+		console.log(csvBannersData);
+		renderBanners();
+		updateWishlistDisplay();
+	})
+	.then(
+	//same as above with but with units
+	fetch(csvUrlUnits).then(response => response.text()).then(data => {
+		const csvUnitsData = data;
+		unitsData = csvUnitsData.split('\n').map(line => {const [id, name, rarity, bIds, image] = line.split(',');
+			return {
+				id: parseInt(id),
+				name: name,
+				rarity: rarity,
+				bIds: bIds.replace('.', ','),
+				image: image
+			};
+		});
+		console.log(csvUnitsData);
+		renderBanners();
+		updateWishlistDisplay();
+	})
+	)
 }
 
 function setupEventListeners() {
@@ -129,7 +94,7 @@ function setupEventListeners() {
 
 	document.getElementById('resetDataBtn').addEventListener('click', function() {
 		if (confirm('Are you sure you want to reset all your data? This cannot be undone.')) {
-			userUnits = {};
+			userUnits = [];
 			saveUserData();
 			renderBanners();
 			updateWishlistDisplay();
@@ -152,7 +117,7 @@ function renderBanners() {
 		<h3 class="banner-title">${banner.name}</h3>
 	</div>
 	<div class="units-container" id="units-${banner.id}">
-		${renderBannerUnits(banner.units)}
+		${renderBannerUnits(banner.id)}
 	</div>
 	`;
 
@@ -161,25 +126,24 @@ function renderBanners() {
 }
 
 //Called by the renderBanners() function, does the same as that function, but with units
-function renderBannerUnits(unitIds) {
+function renderBannerUnits(bannerId) {
 	let unitsHTML = '';
 
-	unitIds.forEach(unitId => {const unit = unitsData.find(u => u.id === unitId);
-	if (unit) {
-		const status = userUnits[unitId] || STATUS_UNOBTAINED;
-		const statusClass = getStatusClass(status);
+	// Filter units that belong to this banner
+	const bannerUnits = unitsData.filter(unit => unit.bIds.includes(bannerId));
 
-		unitsHTML += `
-		<div class="unit ${statusClass}" data-unit-id="${unit.id}">
-			${unit.rarity === 'L' ? '<span class="unit-rarity">Legendary</span>' : unit.rarity === 'U' ? '<span class="unit-rarity">Uber</span>' : '<span class="unit-rarity">Super</span>'}
-			<img src="units/${unit.name}.png" alt="${unit.name}" class="unit-image" data-unit-id="${unit.id}">
-			<span class="unit-name">${unit.name}</span>
-		</div>
-		`;
-	}
+	bannerUnits.forEach(unit => {const status = userUnits[unit.id] || STATUS_UNOBTAINED; const statusClass = getStatusClass(status);
+
+	unitsHTML += `
+	<div class="unit ${statusClass}" data-unit-id="${unit.id}">
+		${unit.rarity === 'L' ? '<span class="unit-rarity">Legendary</span>' : unit.rarity === 'S' ? '<span class="unit-rarity">Super</span>' : '<span class="unit-rarity">Uber</span>'}
+		<img src="${unit.image}" alt="${unit.name}" class="unit-image" data-unit-id="${unit.id}">
+		<span class="unit-name">${unit.name}</span>
+	</div>
+	`;
 	});
 
-return unitsHTML;
+	return unitsHTML;
 }
 
 //Toggles if units are displayed in a banner
@@ -238,7 +202,7 @@ wishlistedUnits.forEach(unitId => {const unit = unitsData.find(u => u.id === uni
 	if (unit) {
 		wishlistHTML += `
 		<div class="wishlist-unit">
-			<img src="units/${unit.name}.png" alt="${unit.name}" class="unit-image" data-unit-id="${unit.id}">
+			<img src="${unit.image}" alt="${unit.name}" class="unit-image" data-unit-id="${unit.id}">
 			<span class="unit-name">${unit.name}</span>
 		</div>
 		`;
