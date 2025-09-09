@@ -10,6 +10,7 @@ This is a website to help players keep track of their units in the game "Battle 
 
 * View units organized by their banners
 * Toggle unit status: unobtained, obtained, or wishlist by clicking the units images, all have visual indicators with distinct colors and a tracker
+* Search bar to filter each Banners
 * Data is saved locally on the pc
 * Wishlist section displaying units one wishes to obtain but still hasn't
 
@@ -28,5 +29,5 @@ This does not connect to your in-game account, you have to do the tracking manua
 #### Things to add
 
 * Move data to a csv for easier organization
-* Search bar for Banners/Units
+* Search bar for Banners/Units (Banners done)
 * Add sections for the different versions/regions of the game

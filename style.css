@@ -10,12 +10,6 @@
 --transition: all 0.3s ease;
 }
 
-    {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    }
-
 body {
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 background-color: var(--background-color);
@@ -38,6 +32,14 @@ box-shadow: var(--card-shadow);
 h1 {
 font-size: 2.5rem;
 margin-bottom: 10px;
+}
+
+#searchBanners {
+padding: 10px;
+width: 300px;
+border: 2px solid var(--primary-color);
+border-radius: 5px;
+font-size: 1rem;
 }
 
 .app-container {
@@ -282,18 +284,25 @@ transition: var(--transition);
 background-color: var(--secondary-color);
 }
 
+.search-bar {
+margin: 20px 0;
+text-align: center;
+}
+
 @media (max-width: 800px) {
-.banner-item {
-width: 100%;
-max-width: 800px;
-}
-.status-counter {
-flex-direction: column;
-align-items: center;
-gap: 10px;
-}
-.controls {
-flex-direction: column;
-align-items: center;
-}
+	.banner-item {
+	width: 100%;
+	max-width: 800px;
+	}
+
+	.status-counter {
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	}
+
+	.controls {
+	flex-direction: column;
+	align-items: center;
+	}
 }

@@ -1,12 +1,11 @@
 let bannersData = [];
 let unitsData = [];
-let userUnits = {};
+let userUnits = [];
 
 const STATUS_UNOBTAINED = 0;
 const STATUS_OBTAINED = 1;
 const STATUS_WISHLIST = 2;
 
-//Initializes all data from the cache (if any is present)
 document.addEventListener('DOMContentLoaded', function() {
 	loadUserData();
 	loadBannersData();
@@ -136,6 +135,8 @@ function setupEventListeners() {
 			updateWishlistDisplay();
 		}
 	});
+	
+	document.getElementById('searchBanners').addEventListener('input', function(e) {filterBanners(e.target.value);});
 }
 
 function renderBanners() {
@@ -170,7 +171,7 @@ function renderBannerUnits(unitIds) {
 
 		unitsHTML += `
 		<div class="unit ${statusClass}" data-unit-id="${unit.id}">
-			${unit.rarity === 'L' ? '<span class="unit-rarity">Legendary</span>' : '<span class="unit-rarity">Uber</span>'}
+			${unit.rarity === 'L' ? '<span class="unit-rarity">Legendary</span>' : unit.rarity === 'U' ? '<span class="unit-rarity">Uber</span>' : '<span class="unit-rarity">Super</span>'}
 			<img src="units/${unit.name}.png" alt="${unit.name}" class="unit-image" data-unit-id="${unit.id}">
 			<span class="unit-name">${unit.name}</span>
 		</div>
@@ -264,4 +265,11 @@ function updateStatusCounters() {
 document.getElementById('unobtainedCount').textContent = unobtained;
 document.getElementById('obtainedCount').textContent = obtained;
 document.getElementById('wishlistCount').textContent = wishlist;
+}
+
+function filterBanners(searchTerm) {
+	const banners = document.querySelectorAll('.banner-item');
+	const term = searchTerm.toLowerCase();
+
+	banners.forEach(banner => {const title = banner.querySelector('.banner-title').textContent.toLowerCase(); banner.style.display = title.includes(term) ? 'block' : 'none';});
 }
