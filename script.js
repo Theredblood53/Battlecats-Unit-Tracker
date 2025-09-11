@@ -54,10 +54,11 @@ function loadBannersData() {
 				id: parseInt(id),
 				name: name,
 				rarity: rarity,
-				bIds: bIds.replace('.', ','),
+				bIds: bIds.replaceAll('.', ','),
 				image: image
 			};
 		});
+		console.log(unitsData);
 		renderBanners();
 		updateWishlistDisplay();
 		updateStatusCounters();
