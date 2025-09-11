@@ -131,8 +131,9 @@ function renderBanners() {
 function renderBannerUnits(bannerId) {
 	let unitsHTML = '';
 
-	// Filter units that belong to this banner
-	const bannerUnits = unitsData.filter(unit => unit.bIds.includes(bannerId));
+	//Filter units that belong to this banner
+	//Had to be Updated to fix a bug where units in some banners would appear in other banners they didn't belong
+	const bannerUnits = unitsData.filter(unit => {const bannerIds = unit.bIds.split(',').map(id => parseInt(id)); return bannerIds.includes(bannerId);});
 
 	bannerUnits.forEach(unit => {const status = userUnits[unit.id] || STATUS_UNOBTAINED; const statusClass = getStatusClass(status);
 
@@ -251,7 +252,7 @@ function filterBannersByUnit(searchTerm) {
 
 	banners.forEach(banner => {
 		const bannerId = parseInt(banner.querySelector('.banner').dataset.bannerId);
-		const bannerUnits = unitsData.filter(unit => unit.bIds.includes(bannerId));
+		const bannerUnits = unitsData.filter(unit => {const bannerIds = unit.bIds.split(',').map(id => parseInt(id));return bannerIds.includes(bannerId);});
 		const hasMatchingUnit = bannerUnits.some(unit => unit.name.toLowerCase().includes(term));
 
 		banner.style.display = hasMatchingUnit ? 'block' : 'none';
