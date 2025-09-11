@@ -10,10 +10,10 @@ const STATUS_OBTAINED = 1;
 const STATUS_WISHLIST = 2;
 
 document.addEventListener('DOMContentLoaded', function() {
-	loadUserData();
 	loadBannersData();
+	loadUserData();
 	setupEventListeners();
-	updateStatusCounters();
+	updateWishlistDisplay();
 });
 
 //Initializes all data from the cache (if any is present)
@@ -41,9 +41,9 @@ function loadBannersData() {
 				image: image
 			};
 		});
-		console.log(csvBannersData);
 		renderBanners();
 		updateWishlistDisplay();
+		updateStatusCounters();
 	})
 	.then(
 	//same as above with but with units
@@ -58,9 +58,9 @@ function loadBannersData() {
 				image: image
 			};
 		});
-		console.log(csvUnitsData);
 		renderBanners();
 		updateWishlistDisplay();
+		updateStatusCounters();
 	})
 	)
 }
@@ -102,6 +102,8 @@ function setupEventListeners() {
 	});
 	
 	document.getElementById('searchBanners').addEventListener('input', function(e) {filterBanners(e.target.value);});
+	
+	document.getElementById('searchUnits').addEventListener('input', function(e) {filterBannersByUnit(e.target.value);});
 }
 
 function renderBanners() {
@@ -113,7 +115,7 @@ function renderBanners() {
 
 	bannerItem.innerHTML = `
 	<div class="banner" data-banner-id="${banner.id}">
-		<img src="banners/${banner.image}.png" alt="${banner.name}" class="banner-image">
+		<img src="${banner.image}" alt="${banner.name}" class="banner-image">
 		<h3 class="banner-title">${banner.name}</h3>
 	</div>
 	<div class="units-container" id="units-${banner.id}">
@@ -236,4 +238,22 @@ function filterBanners(searchTerm) {
 	const term = searchTerm.toLowerCase();
 
 	banners.forEach(banner => {const title = banner.querySelector('.banner-title').textContent.toLowerCase(); banner.style.display = title.includes(term) ? 'block' : 'none';});
+}
+
+function filterBannersByUnit(searchTerm) {
+	const banners = document.querySelectorAll('.banner-item');
+	const term = searchTerm.toLowerCase();
+
+	if (!term) {
+		banners.forEach(banner => banner.style.display = 'block');
+		return;
+	}
+
+	banners.forEach(banner => {
+		const bannerId = parseInt(banner.querySelector('.banner').dataset.bannerId);
+		const bannerUnits = unitsData.filter(unit => unit.bIds.includes(bannerId));
+		const hasMatchingUnit = bannerUnits.some(unit => unit.name.toLowerCase().includes(term));
+
+		banner.style.display = hasMatchingUnit ? 'block' : 'none';
+	});
 }

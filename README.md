@@ -2,15 +2,17 @@
 
 
 
-This is a website to help players keep track of their units in the game "Battle Cats." It provides a user-friendly interface to mark units as obtained, unobtained, or wishlist, and organizes them by banners. (Currently only banners common across all versions/regions will be available)
+This is a website to help players keep track of their units in the game "Battle Cats." It provides a user-friendly interface to mark units, all organized by their banners, as obtained, unobtained, or wishlist.
+
+(Currently only banners common across all versions/regions will be available)
 
 
 
 #### Features
 
 * View units organized by their banners
-* Toggle unit status: unobtained, obtained, or wishlist by clicking the units images, all have visual indicators with distinct colors and a tracker
-* Search bar to filter each Banners
+* Toggle unit status: unobtained, obtained, or wishlist by clicking the units images
+* Search bar to filter each Banners, and the Cats in each
 * Data is saved locally on the pc
 * Wishlist section displaying units one wishes to obtain but still hasn't
 
@@ -29,5 +31,5 @@ This does not connect to your in-game account, you have to do the tracking manua
 #### Things to add
 
 * ~~Move data to a csv for easier organization~~ (Done)
-* Search bar for Banners/Units (Banners done)
+* ~~Search bar for Banners/Units~~ (Done)
 * Add sections for the different versions/regions of the game

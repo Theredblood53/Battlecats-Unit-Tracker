@@ -15,14 +15,19 @@
 	</header>
 
 	<details class="instructions" id="instructions">
-		<summary class="instructions-toggle" aria-label="Toggle instructions">Tips & Controls</summary>
+		<summary class="instructions-toggle" aria-label="Toggle instructions">How to use this site</summary>
 
 		<div class="instructions-content">
-			<h2>How it works</h2>
+			<h2>Controls:</h2>
 			<ul>
-				<li>Left-click a unit to cycle statuses (unobtained → obtained → wishlist).</li>
-				<li>Click a banner to show/hide its units.</li>
-				<li>Use Expand/Collapse All for quick toggling.</li>
+				<li>Click on a Banner to show it's units.</li>
+				<li>Click on a Cat to mark it as Obtained/In Wishlist.</li>
+			</ul>
+			<h2>Tips & Tricks:</h2>
+			<ul>
+				<li>Use the Expand/Collapse All buttons to display each banners Cats all at once.</li>
+				<li>Use the search functions to quickly find the Banner/Cat you are looking for!</li>
+				<li>All data is saved locally, so don't worry about losing it all!</li>
 			</ul>
 		</div>
 	</details>
@@ -49,19 +54,22 @@
 				<span>Wishlisted cats: <span id="wishlistCount">0</span></span>
 			</div>
 			<div class="controls">
-			<button class="btn" id="expandAllBtn">
-				<i class="fas fa-expand"></i> Expand All Banners
-			</button>
-			<button class="btn" id="collapseAllBtn">
-				<i class="fas fa-compress"></i> Collapse All Banners
-			</button>
-			<button class="btn" id="resetDataBtn">
-				<i class="fas fa-trash"></i> Reset Data
-			</button>
-			<div class="search-bar">
-				<input type="text" autocomplete="off" id="searchBanners" placeholder="Search by Banner Name">
-			</div>
-			</div>
+				<button class="btn" id="expandAllBtn">
+					<i class="fas fa-expand"></i> Expand All Banners
+				</button>
+				<button class="btn" id="collapseAllBtn">
+					<i class="fas fa-compress"></i> Collapse All Banners
+				</button>
+				<button class="btn" id="resetDataBtn">
+					<i class="fas fa-trash"></i> Reset Data
+				</button>
+				<div class="search-bar">
+				  <input type="text" autocomplete="off" id="searchBanners" placeholder="Filter by Banner Name">
+				</div>
+				<div class="search-bar">
+					<input type="text" autocomplete="off" id="searchUnits" placeholder="Filter by Cat Name">
+				</div>	
+		  </div>
 		</div>
 
 		<div class="banners-grid" id="bannersGrid">
