@@ -34,27 +34,25 @@ function loadBannersData() {
 	//fetch the banners data from the csv and put it in an array
 	fetch(csvUrlBanners).then(response => response.text()).then(data => {
 		const csvBannersData = data;
-		bannersData = csvBannersData.split('\n').map(line => {const [id, name, image] = line.split(',');
+		bannersData = csvBannersData.split('\n').filter(line => line.trim()).map(line => {const [id, name, image] = line.split(',');
 			return {
 				id: parseInt(id),
 				name: name,
 				image: image
 			};
 		});
-		renderBanners();
-		updateWishlistDisplay();
-		updateStatusCounters();
 	})
-	.then(
+	.then(() => {
 	//same as above with but with units
 	fetch(csvUrlUnits).then(response => response.text()).then(data => {
 		const csvUnitsData = data;
-		unitsData = csvUnitsData.split('\n').map(line => {const [id, name, rarity, bIds, image] = line.split(',');
+		//it stopped to parse the data into the array only for the units, this somehow fixes it, i think it has to do with empty lines, just in case i also applied it above
+		unitsData = csvUnitsData.split('\n').filter(line => line.trim()).map(line => {const [id, name, rarity, bIds, image] = line.split(',');
 			return {
 				id: parseInt(id),
 				name: name,
 				rarity: rarity,
-				bIds: bIds.replaceAll('.', ','),
+				bIds: bIds ? bIds.replaceAll('.', ',') : '',
 				image: image
 			};
 		});
@@ -62,8 +60,8 @@ function loadBannersData() {
 		renderBanners();
 		updateWishlistDisplay();
 		updateStatusCounters();
-	})
-	)
+	});
+	});
 }
 
 function setupEventListeners() {
@@ -140,7 +138,7 @@ function renderBannerUnits(bannerId) {
 
 	unitsHTML += `
 	<div class="unit ${statusClass}" data-unit-id="${unit.id}">
-		${unit.rarity === 'L' ? '<span class="unit-rarity">Legendary</span>' : unit.rarity === 'S' ? '<span class="unit-rarity">Super</span>' : '<span class="unit-rarity">Uber</span>'}
+		${unit.rarity === 'L' ? '<span class="unit-rarity">Legendary</span>' : unit.rarity === 'Su' ? '<span class="unit-rarity">Super</span>' : unit.rarity === 'R' ? '<span class="unit-rarity">Rare</span>' : unit.rarity === 'Sp' ? '<span class="unit-rarity">Special</span>' : '<span class="unit-rarity">Uber</span>'}
 		<img src="${unit.image}" alt="${unit.name}" class="unit-image" data-unit-id="${unit.id}">
 		<span class="unit-name">${unit.name}</span>
 	</div>
