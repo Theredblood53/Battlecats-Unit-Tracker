@@ -31,7 +31,7 @@ function saveUserData() {
 }
 
 function loadBannersData() {
-	//fetch the banners data from the csv and put it in an array
+	//Fetch the banners data from the csv and put it in an array
 	fetch(csvUrlBanners).then(response => response.text()).then(data => {
 		const csvBannersData = data;
 		bannersData = csvBannersData.split('\n').filter(line => line.trim()).map(line => {const [id, name, image] = line.split(',');
@@ -43,24 +43,23 @@ function loadBannersData() {
 		});
 	})
 	.then(() => {
-	//same as above with but with units
-	fetch(csvUrlUnits).then(response => response.text()).then(data => {
-		const csvUnitsData = data;
-		//it stopped to parse the data into the array only for the units, this somehow fixes it, i think it has to do with empty lines, just in case i also applied it above
-		unitsData = csvUnitsData.split('\n').filter(line => line.trim()).map(line => {const [id, name, rarity, bIds, image] = line.split(',');
-			return {
-				id: parseInt(id),
-				name: name,
-				rarity: rarity,
-				bIds: bIds ? bIds.replaceAll('.', ',') : '',
-				image: image
-			};
-		});
-		console.log(unitsData);
+		//Same as above but with units
+		fetch(csvUrlUnits).then(response => response.text()).then(data => {
+			const csvUnitsData = data;
+			//It stopped to parse the data into the array only for the units, this somehow fixes it, i think it has to do with empty lines, just in case i also applied it above
+			unitsData = csvUnitsData.split('\n').filter(line => line.trim()).map(line => {const [id, name, rarity, bIds, image] = line.split(',');
+				return {
+					id: parseInt(id),
+					name: name,
+					rarity: rarity,
+					bIds: bIds ? bIds.replaceAll('.', ',') : '',
+					image: image
+				};
+			});
 		renderBanners();
 		updateWishlistDisplay();
 		updateStatusCounters();
-	});
+		});
 	});
 }
 
@@ -189,18 +188,16 @@ function getStatusClass(status) {
 
 function updateWishlistDisplay() {
 	const wishlistContainer = document.getElementById('wishlistContainer');
-	const wishlistedUnits = Object.keys(userUnits)
-	.filter(unitId => userUnits[unitId] === STATUS_WISHLIST)
-	.map(unitId => parseInt(unitId));
+	const wishlistedUnits = Object.keys(userUnits).filter(unitId => userUnits[unitId] === STATUS_WISHLIST).map(unitId => parseInt(unitId));
 
 	if (wishlistedUnits.length === 0) {
 		wishlistContainer.innerHTML = '<div class="wishlist-empty">No units in your wishlist yet. Click on units to add them!</div>';
 		return;
 	}
 
-let wishlistHTML = '';
+	let wishlistHTML = '';
 
-wishlistedUnits.forEach(unitId => {const unit = unitsData.find(u => u.id === unitId);
+	wishlistedUnits.forEach(unitId => {const unit = unitsData.find(u => u.id === unitId);
 	if (unit) {
 		wishlistHTML += `
 		<div class="wishlist-unit">
@@ -209,9 +206,9 @@ wishlistedUnits.forEach(unitId => {const unit = unitsData.find(u => u.id === uni
 		</div>
 		`;
 	}
-});
+	});
 
-wishlistContainer.innerHTML = wishlistHTML;
+	wishlistContainer.innerHTML = wishlistHTML;
 }
 
 function updateStatusCounters() {
@@ -228,9 +225,9 @@ function updateStatusCounters() {
 		}
 	});
 
-document.getElementById('unobtainedCount').textContent = unobtained;
-document.getElementById('obtainedCount').textContent = obtained;
-document.getElementById('wishlistCount').textContent = wishlist;
+	document.getElementById('unobtainedCount').textContent = unobtained;
+	document.getElementById('obtainedCount').textContent = obtained;
+	document.getElementById('wishlistCount').textContent = wishlist;
 }
 
 function filterBanners(searchTerm) {
@@ -244,16 +241,31 @@ function filterBannersByUnit(searchTerm) {
 	const banners = document.querySelectorAll('.banner-item');
 	const term = searchTerm.toLowerCase();
 
+	//Make all units visible if seatch is emptyu
 	if (!term) {
-		banners.forEach(banner => banner.style.display = 'block');
+		banners.forEach(banner => {banner.style.display = 'block'; const units = banner.querySelectorAll('.unit'); units.forEach(unit => unit.style.display = 'block');});
 		return;
 	}
 
 	banners.forEach(banner => {
 		const bannerId = parseInt(banner.querySelector('.banner').dataset.bannerId);
-		const bannerUnits = unitsData.filter(unit => {const bannerIds = unit.bIds.split(',').map(id => parseInt(id));return bannerIds.includes(bannerId);});
+		const bannerUnits = unitsData.filter(unit => {const bannerIds = unit.bIds.split(',').map(id => parseInt(id)); return bannerIds.includes(bannerId);});
 		const hasMatchingUnit = bannerUnits.some(unit => unit.name.toLowerCase().includes(term));
 
-		banner.style.display = hasMatchingUnit ? 'block' : 'none';
+		//First hides the banners, then the units
+		if (hasMatchingUnit) {
+			banner.style.display = 'block';
+
+			const unitElements = banner.querySelectorAll('.unit');
+			unitElements.forEach(unitElement => {const unitId = parseInt(unitElement.dataset.unitId); const unit = unitsData.find(u => u.id === unitId);
+			if (unit && unit.name.toLowerCase().includes(term)) {
+				unitElement.style.display = 'block';
+			} else {
+				unitElement.style.display = 'none';
+			}
+			});
+		} else {
+			banner.style.display = 'none';
+		}
 	});
 }
